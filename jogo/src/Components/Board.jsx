@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import Square from "./Square"
+import React, { useState } from "react";
+import Square from "./Square";
 
 const Board = () => {
     // Estado para armazenar o estado atual dos quadrados no tabuleiro
@@ -9,18 +9,18 @@ const Board = () => {
     const [xIsNext, setxIsNext] = useState(true);
 
     // Função para calcular o vencedor com base nos quadrados preenchidos
-    const Winner = calculateWinner(squares);
+    const winner = calculateWinner(squares);
 
     // Função para lidar com o clique em um quadrado
     const handleClick = (i) => {
         // Verifica se o quadrado já está preenchido ou se há um vencedor
-        if (squares[i] || Winner) return;
+        if (squares[i] || winner) return;
 
         // Cria uma uma copia do array de quadrados para evitar mutações diteras
         const newSquares = squares.slice();
 
         // Preenche o quadrado com "X" ou "O" com base na vez do jogador
-        newSquares[i] = xIsNext ? "X" : "O";
+        newSquares[i] = xIsNext ? "🐬" : "🦈";
 
         // Atualiza o estado dos quadrados e passa a vez para o próximo jogador
         setSquares(newSquares);
@@ -34,6 +34,9 @@ const Board = () => {
         setxIsNext(true);
     };
 
+    // Função para calcular o empate
+    const isDraw = squares.every((square) => square !== null);
+
     // Renderização do componente
     return (
         <div>
@@ -41,12 +44,15 @@ const Board = () => {
             <div className="status">
 
                 Status:{" "}
-                {Winner ? (
+                {winner ? (
                     // Exibe o vencedor, se hover
-                    <p className="winner">O Vencedor é: {Winner}!!</p>
+                    <p className="winner">O Vencedor é: {winner}!!</p>
+                ) : isDraw ? (
+                    // Exibe empate se não hover vencedor e todas as células estiverem preenchidas
+                    <p className="draw">O jogo empatou!</p>
                 ) : (
                     // Exibe o próximo jogador se não hover vencedor
-                    `Proximo a jogar: ${xIsNext ? "X" : "O"}`
+                    `Proximo a jogar: ${xIsNext ? "🐬" : "🦈"}`
                 )}
             </div>
 
@@ -92,14 +98,14 @@ const calculateWinner = (squares) => {
     // Verifica todas as linhas para determinar se há um vencedor
     for (let i=0; i<lines.length; i++) {
         const [a, b, c] = lines[i];
-        if (squares [a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-            return squares[a]
+        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+            return squares[a];
         }
     }
 
     // retorna null se hover empate
-    return null
-}
+    return null;
+};
 
 // Exporta o componente Board como padrão
 export default Board;
